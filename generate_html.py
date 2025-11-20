@@ -14,7 +14,7 @@ def normalize_category(cat):
     return 'その他業者'
 
 def generate_html():
-    # ✅ 最初のシートを自動で読み込む
+    # Excelの最初のシートを読み込む
     df = pd.read_excel("data.xlsx", engine="openpyxl")
     df = df.dropna(subset=["会社名", "氏名"])
     df['カテゴリ'] = df['カテゴリ'].apply(normalize_category)
@@ -24,6 +24,7 @@ def generate_html():
     df = df.sort_values('カテゴリ')
 
     html = """<!DOCTYPE html><html lang='ja'><head><meta charset='UTF-8'>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>電話帳</title>
 <style>
 body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f9f9f9; }
@@ -35,7 +36,7 @@ header { background-color: #333; color: white; padding: 10px; text-align: center
 .category h2 { margin: 0; padding: 10px; background: #eee; cursor: pointer; font-size: 1em; }
 .contacts { display: none; padding: 10px; }
 .contact-item { margin-bottom: 8px; font-size: 0.9em; }
-.contact-item strong { display: block; font-size: 1.1em; }
+.contact-item strong { display: block; font-size: 1em; }
 .contact-item span { display: block; margin: 2px 0; }
 .contact-item a { color: #004080; text-decoration: none; }
 #auth-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #f9f9f9; display: flex; flex-direction: column; justify-content: center; align-items: center; }
@@ -45,9 +46,7 @@ header { background-color: #333; color: white; padding: 10px; text-align: center
 #no-results { text-align: center; color: red; font-size: 1.2em; display: none; margin-top: 20px; }
 @media (max-width: 600px) {
   header { font-size: 1em; }
-  .search-bar input { width: 95%; }
   .contact-item strong { font-size: 1em; }
-  .contact-item span { font-size: 0.85em; }
 }
 </style></head><body>
 <div id='auth-screen'><h2>PINコードを入力してください</h2><input type='password' id='pin' maxlength='4' placeholder='0000'><button onclick='checkPIN()'>認証</button><div id='auth-error'></div></div>
