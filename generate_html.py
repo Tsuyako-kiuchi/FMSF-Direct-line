@@ -14,7 +14,7 @@ def normalize_category(cat):
     return 'その他業者'
 
 def generate_html():
-    # ✅ 最初のシートを自動で読み込む（シート名のエラー防止）
+    # ✅ 最初のシートを自動読み込み（シート名エラー防止）
     df = pd.read_excel("data.xlsx", engine="openpyxl")
     df = df.dropna(subset=["会社名", "氏名"])
     df['カテゴリ'] = df['カテゴリ'].apply(normalize_category)
@@ -24,15 +24,16 @@ def generate_html():
     df = df.sort_values('カテゴリ')
 
     html = """<!DOCTYPE html><html lang='ja'><head><meta charset='UTF-8'>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>電話帳</title>
 <style>
 body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f9f9f9; }
 header { background-color: #333; color: white; padding: 10px; text-align: center; font-size: 1.5em; }
 .search-bar { position: sticky; top: 0; background: #333; padding: 10px; display: flex; justify-content: center; flex-wrap: wrap; }
-.search-bar input { width: 60%; padding: 8px; font-size: 1em; margin-bottom: 5px; }
-.search-bar button { padding: 8px; margin-left: 5px; background: #555; color: white; border: none; cursor: pointer; font-size: 1em; }
+.search-bar input { width: 70%; padding: 10px; font-size: 1em; margin-bottom: 5px; }
+.search-bar button { padding: 10px; margin-left: 5px; background: #555; color: white; border: none; cursor: pointer; font-size: 1em; }
 .category { margin: 10px; background: #fff; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-.category h2 { margin: 0; padding: 10px; background: #eee; cursor: pointer; font-size: 1.2em; }
+.category h2 { margin: 0; padding: 15px; background: #eee; cursor: pointer; font-size: 1.2em; }
 .contacts { display: none; padding: 10px; }
 .contact-item { margin-bottom: 10px; padding: 8px; border-bottom: 1px solid #ddd; font-size: 1em; }
 .contact-item strong { display: block; font-size: 1.1em; }
@@ -43,6 +44,14 @@ header { background-color: #333; color: white; padding: 10px; text-align: center
 #auth-screen button { font-size: 1.2em; padding: 10px 20px; background: #004080; color: white; border: none; cursor: pointer; }
 #auth-error { color: red; margin-top: 10px; }
 #no-results { text-align: center; color: red; font-size: 1.2em; display: none; margin-top: 20px; }
+/* ✅ スマホ対応 */
+@media (max-width: 600px) {
+    header { font-size: 1.2em; }
+    .search-bar input { width: 100%; margin-bottom: 10px; }
+    .search-bar button { width: 48%; margin: 5px 1%; }
+    .category h2 { font-size: 1.1em; padding: 10px; }
+    .contact-item { font-size: 0.9em; }
+}
 </style></head><body>
 <div id='auth-screen'><h2>PINコードを入力してください</h2><input type='password' id='pin' maxlength='4' placeholder='0000'><button onclick='checkPIN()'>認証</button><div id='auth-error'></div></div>
 <header style='display:none;'>電話帳</header>
