@@ -14,8 +14,8 @@ def normalize_category(cat):
     return 'その他業者'
 
 def generate_html():
-    # ✅ シート名を「data.xlsx」に変更
-    df = pd.read_excel("data.xlsx", sheet_name="data.xlsx", engine="openpyxl")
+    # ✅ 最初のシートを自動で読み込む（シート名のエラー防止）
+    df = pd.read_excel("data.xlsx", engine="openpyxl")
     df = df.dropna(subset=["会社名", "氏名"])
     df['カテゴリ'] = df['カテゴリ'].apply(normalize_category)
 
