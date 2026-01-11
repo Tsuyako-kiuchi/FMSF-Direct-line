@@ -6,6 +6,9 @@ on:
       - 'data.xlsx'
   workflow_dispatch:
 
+permissions:
+  contents: write   # ← この行が重要です！
+
 jobs:
   build:
     runs-on: ubuntu-latest
