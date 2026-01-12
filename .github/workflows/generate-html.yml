@@ -16,10 +16,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4 # v3 から v4 に更新
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5 # v4 から v5 に更新
         with:
           python-version: '3.11'
 
@@ -33,7 +33,7 @@ jobs:
           # index.html がリポジトリのルートに生成されることを想定しています。
 
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4 # v3 から v4 に更新
         with:
           path: './' # 生成された index.html があるディレクトリを指定します。
 
@@ -46,4 +46,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v3
+        uses: actions/deploy-pages@v4 # v3 から v4 に更新
