@@ -1,4 +1,4 @@
-name: Generate HTML from Excel
+name: Generate HTML from Excel and Deploy to Pages
 
 on:
   push:
@@ -7,7 +7,9 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write   # ← この行が重要です！
+  contents: read   # リポジトリのチェックアウトに必要
+  pages: write     # GitHub Pagesのデプロイに必要
+  id-token: write  # OIDC認証に必要
 
 jobs:
   build:
@@ -28,13 +30,20 @@ jobs:
       - name: Generate HTML
         run: |
           python generate_html.py
+          # index.html がリポジトリのルートに生成されることを想定しています。
 
-      - name: Commit and push changes
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git config --global user.name 'github-actions'
-          git config --global user.email 'github-actions@github.com'
-          git add index.html
-          git commit -m 'Auto-generated index.html from Excel' || echo "No changes to commit"
-          git push origin HEAD:${{ github.ref }}
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './' # 生成された index.html があるディレクトリを指定します。
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build # build ジョブが完了してから実行します
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v3
