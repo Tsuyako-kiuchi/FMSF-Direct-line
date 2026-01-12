@@ -55,7 +55,7 @@ header { background-color: #333; color: white; padding: 10px; text-align: center
 <div id='no-results'>該当者なし</div>
 <div id='content' style='display:none;'>"""
 
-    for category, group in df.groupby('カテゴリ'):
+    for category, group in df.groupby('カテゴリ', observed=False):
         html += f"<div class='category'><h2 onclick='toggleCategory(this)'>{category}</h2><div class='contacts'>"
         for _, row in group.iterrows():
             html += "<div class='contact-item'>"
